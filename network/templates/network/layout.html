@@ -3,9 +3,36 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        {% comment %}
+        THIS WAS DRIVING ME NUTS: https://stackoverflow.com/a/45530211/14000441
+        Dev-Tools responsive on Vivaldi was zooming out instead of compressing content!!
+        {% endcomment %}
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
+        {# BECAUSE BOOTSTRAP EVERYTHING! :V #}
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
+        <link href="{% static 'network/css/bootstrap.min.css' %}" rel="stylesheet">
+        <script src="{% static 'network/js/bootstrap.min.js' %}"></script>
+
+        {# Load and Apply Overlay Scrollbars #}
+        <link href="{% static 'network/css/OverlayScrollbars.min.css' %}" rel="stylesheet">
+        <script src="{% static 'network/js/OverlayScrollbars.min.js' %}"></script>
+        <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+	        OverlayScrollbars(document.querySelectorAll("body"), { });
+        });     
+        </script>
+        
+        {# Favicon #}
+        <link rel="shortcut icon" type="image/png" href="{% static '/network/favicon.ico' %}"/>
+
+        {# Custom Styles.css #}
+        <link href="{% static 'network/css/styles.css' %}" rel="stylesheet">
+        
+        {# Page Title #}
         <title>{% block title %}Social Network{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
     </head>
     <body>
 
@@ -23,6 +50,9 @@
                   <a class="nav-link" href="{% url 'index' %}">All Posts</a>
                 </li>
                 {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'new_post' %}">New Post</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Following</a>
                     </li>

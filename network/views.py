@@ -4,11 +4,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from network.models import User
+from django.contrib.auth.decorators import login_required
+
+from network.models import PostForm, User
 
 
 def index(request):
-    return render(request, "network/index.html")
+    all_posts = Post.objects.all().orderby('-timestamp')
+    context = {
+        'all_posts': all_posts,
+    }
+    return render(request, "network/index.html", context)
 
 
 def login_view(request):
@@ -61,3 +67,24 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+@login_required
+def new_post(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            context = {
+                'form': PostForm,
+                }
+            return render(request, "network/new_post.html", context)
+
+    else:
+        context = {
+            'form': PostForm,
+        }
+
+        return render(request, "network/new_post.html", context)
