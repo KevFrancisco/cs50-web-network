@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
+from typing_extensions import runtime
 
 from network.models import PostForm, User, Post, Like, Follower
 
@@ -92,3 +93,35 @@ def new_post(request):
         }
 
         return render(request, "network/new_post.html", context)
+
+@login_required
+def user_profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    posts = Post.objects.filter(owner=user).order_by('-timestamp')
+
+    followers = Follower.objects.filter(following=user)
+    following = Follower.objects.filter(followed_by=user)
+
+    context = {
+        'user': user,
+        'posts': posts,
+        'followers': followers,
+        'following': following,
+    }
+
+    return render(request, "network/user_profile.html", context)
+
+@login_required
+def follow_toggle(request, user_id):
+    u = User.objects.get(pk=user_id)
+    f = Follower.objects.filter(following=u,followed_by=request.user)
+    if f.exists():
+        f.delete()
+    else:
+        Follower.objects.create(
+                            following=u,
+                            followed_by=request.user
+                        )
+
+
+    return HttpResponseRedirect(reverse("user_profile"), kwargs={'user_id':request.user.id})

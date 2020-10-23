@@ -7,18 +7,32 @@
 
 {% for post in all_posts %}
     <div class="card bg-primary m-3 text-white">
-        <div class="card-header">
-            {{ post }}
+        <div class="card-header d-flex justify-content-between">
+            <div>
+                {{ post }}
+            </div>
+
+            <div>
+                Posted by : <a href="{% url 'user_profile' post.owner.id %}">{{ post.owner }}</a>
+            </div>
         </div>
         
-        <div class="card-body">
+        <div class="card-body text-center">
             {% if post.image %}
-                <img class="img-fluid w-50 mx-auto" src="..{{ post.image.url }}" alt="{{ post.text }}">
+                <img class="img-fluid w-50" src="..{{ post.image.url }}" alt="{{ post.text }}">
             {% endif %}
         </div>
 
-        <div class="card-footer">
-            {{ post.like_count }} likes
+        <div class="card-footer d-flex justify-content-between">
+            <div>
+                <i class="fas fa-thumbs-up mr-2"></i>
+                <i class="far fa-thumbs-up mr-2"></i>
+                {{ post.like_count }} likes
+            </div>
+
+            <div class="text-muted">
+                {{ post.timestamp }} - {{post.timestamp|timesince}} ago
+            </div>
         </div>
     </div>
 {% endfor %}

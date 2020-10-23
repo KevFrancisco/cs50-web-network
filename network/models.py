@@ -12,6 +12,10 @@ class Post(models.Model):
                         related_name='posts_posted',
                         on_delete=models.CASCADE,
                     )
+
+    title = models.CharField(
+                        max_length=111,
+                    )
     text = models.CharField(
                         max_length=555,
                     )
@@ -49,7 +53,7 @@ class Like(models.Model):
 # FIXME is this model correct?
 # We come back to this later quack
 class Follower(models.Model):
-    followed = models.ForeignKey(
+    following = models.ForeignKey(
                         User,
                         related_name='following',
                         on_delete=models.CASCADE,
@@ -60,4 +64,4 @@ class Follower(models.Model):
                         on_delete=models.CASCADE,
                     )
     def __str__(self):
-        return f"{self.followed_by} is following {self.followed}"
+        return f"{self.followed_by} is following {self.following}"

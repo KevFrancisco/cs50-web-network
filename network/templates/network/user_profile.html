@@ -2,7 +2,48 @@
 
 {% block body %}
 
-<h1>User Profile</h1>
+<h1>User Profile for {{ user.username }}</h1>
 
+<div class="badge">
+    Following: {{user.following.first_name}}
+    <br>
+    {{ following }}
+</div>
+
+<div class="badge">
+    Followers: {{user.followed_by.count}}
+    <br>
+    {{ followers }}
+</div>
+
+{% if user == request.user %}
+    ME!
+{% else %}
+    {% if user in following %}
+        <a href='{% url 'follow_toggle' user.id %}'>Unfollow</a>
+    {% else %}
+        <a href='{% url 'follow_toggle' user.id %}'>Follow</a>
+    {%endif%}
+{% endif %}
+
+<hr>
+
+{{ request.user.followed_by }}
+
+<hr>
+
+{% for post in posts %}
+    <div class="card bg-light m-3">
+        <div class="card-header">
+            {{post.text}}
+        </div>
+        <div class="card-body">
+            {{post}}
+        </div>
+        <div class="card-footer">
+            {{post.timestamp}}
+        </div>
+    </div>
+{% endfor %}
 
 {% endblock %}
