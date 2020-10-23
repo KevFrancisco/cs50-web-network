@@ -6,9 +6,21 @@
 
 
 {% for post in all_posts %}
-    <div class="card">
-        {{ post }}
-    </div>
+    <div class="card bg-primary m-3 text-white">
+        <div class="card-header">
+            {{ post }}
+        </div>
+        
+        <div class="card-body">
+            {% if post.image %}
+                <img class="img-fluid w-50 mx-auto" src="..{{ post.image.url }}" alt="{{ post.text }}">
+            {% endif %}
+        </div>
 
+        <div class="card-footer">
+            {{ post.like_count }} likes
+        </div>
+    </div>
+{% endfor %}
 
 {% endblock %}

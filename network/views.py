@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,7 +11,10 @@ from network.models import PostForm, User, Post, Like, Follower
 
 
 def index(request):
-    all_posts = Post.objects.all().order_by('-timestamp')
+    all_posts = (Post.objects
+                        .annotate(like_count=Count('likes'))
+                        .order_by('-timestamp')
+                )
     context = {
         'all_posts': all_posts,
     }

@@ -23,7 +23,7 @@ class Post(models.Model):
                         auto_now=True
                     )
     def __str__(self):
-        return f"{self.owner} + {self.text} + {self.image} + {self.timestamp}"
+        return f"{self.owner} posted {self.text}"
 
 class PostForm(ModelForm):
     class Meta:
@@ -43,6 +43,8 @@ class Like(models.Model):
                         related_name='liked',
                         on_delete=models.CASCADE,
                     )
+    def __str__(self):
+        return f"{self.post} is liked by {self.liker}"
 
 # FIXME is this model correct?
 # We come back to this later quack
@@ -57,3 +59,5 @@ class Follower(models.Model):
                         related_name='followed_by',
                         on_delete=models.CASCADE,
                     )
+    def __str__(self):
+        return f"{self.followed_by} is following {self.followed}"

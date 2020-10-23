@@ -20,3 +20,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("network.urls")),
 ]
+
+# See Reference for image uploads: https://studygyaan.com/django/how-to-upload-and-display-image-in-django
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
