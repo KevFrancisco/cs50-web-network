@@ -6,11 +6,11 @@ from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
 
-from network.models import PostForm, User
+from network.models import PostForm, User, Post, Like, Follower
 
 
 def index(request):
-    all_posts = Post.objects.all().orderby('-timestamp')
+    all_posts = Post.objects.all().order_by('-timestamp')
     context = {
         'all_posts': all_posts,
     }
@@ -71,7 +71,7 @@ def register(request):
 @login_required
 def new_post(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
 
         if form.is_valid():
             form.save()

@@ -6,6 +6,7 @@
 
     <div class="p-3">
         <form action="" class="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="form-group">
                     {{ form.owner | add_label_class:"my-auto text-muted mb-2"}}
                     {{ form.owner | add_class:"form-control"}}

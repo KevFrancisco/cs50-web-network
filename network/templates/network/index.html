@@ -1,5 +1,14 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+
+<h1>Your Feed</h1>
+
+
+{% for post in all_posts %}
+    <div class="card">
+        {{ post }}
+    </div>
+
+
 {% endblock %}
