@@ -27,7 +27,7 @@ class Post(models.Model):
                         auto_now=True
                     )
     def __str__(self):
-        return f"{self.owner} posted {self.text}"
+        return f"{self.owner} posted {self.title}"
 
 class PostForm(ModelForm):
     class Meta:

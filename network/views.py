@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from django.core.paginator import Paginator
+
 from django.contrib.auth.decorators import login_required
 from typing_extensions import runtime
 
@@ -13,12 +15,22 @@ from network.models import PostForm, User, Post, Like, Follower
 
 def index(request):
     all_posts = (Post.objects
+                        .all()
                         .annotate(like_count=Count('likes'))
                         .order_by('-timestamp')
                 )
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     context = {
         'all_posts': all_posts,
+        'page_obj': page_obj,
+        'page_number': page_number,
+        'page_range': paginator.page_range
     }
+
+
     return render(request, "network/index.html", context)
 
 
@@ -99,11 +111,11 @@ def user_profile(request, user_id):
     user = User.objects.get(pk=user_id)
     posts = Post.objects.filter(owner=user).order_by('-timestamp')
 
-    followers = Follower.objects.filter(following=user)
-    following = Follower.objects.filter(followed_by=user)
+    followers = Follower.objects.filter(followed_by=user)
+    following = Follower.objects.filter(following=user)
 
     context = {
-        'user': user,
+        'profile_owner': user,
         'posts': posts,
         'followers': followers,
         'following': following,

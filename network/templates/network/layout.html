@@ -86,7 +86,7 @@
                     {% if user.is_authenticated %}
                     <li class="nav-item text-right">
                         Logged in as
-                        <a class="nav-link p-0" href="#"><strong>{{ request.user.username }}</strong></a>
+                        <a class="nav-link p-0" href="{% url 'user_profile' user.id %}"><strong>{{ request.user.username }}</strong></a>
                     </li>
                     {% endif %}
               </ul>

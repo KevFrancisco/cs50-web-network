@@ -2,43 +2,44 @@
 
 {% block body %}
 
-<h1>User Profile for {{ user.username }}</h1>
+<h1>User Profile for {{  profile_owner.username }}</h1>
 
 <div class="badge">
-    Following: {{user.following.first_name}}
+    Following: {{ profile_owner.following.count }}
     <br>
     {{ following }}
 </div>
 
 <div class="badge">
-    Followers: {{user.followed_by.count}}
+    Followers: {{ profile_owner.followed_by.count }}
     <br>
     {{ followers }}
 </div>
 
-{% if user == request.user %}
+{% if profile_owner == request.user %}
     ME!
 {% else %}
-    {% if user in following %}
-        <a href='{% url 'follow_toggle' user.id %}'>Unfollow</a>
+    {# TODO #}
+    {# Use Fetch to Get this Value - if followed or not #}
+    {% if profile_owner in followers.followed_by %}
+        <a href='{% url 'follow_toggle' profile_owner.id %}'>Unfollow</a>
     {% else %}
-        <a href='{% url 'follow_toggle' user.id %}'>Follow</a>
+        <a href='{% url 'follow_toggle' profile_owner.id %}'>Follow</a>
     {%endif%}
 {% endif %}
 
 <hr>
 
-{{ request.user.followed_by }}
+<h3>Posts by {{ profile_owner }}</h3>
 
-<hr>
 
 {% for post in posts %}
     <div class="card bg-light m-3">
         <div class="card-header">
-            {{post.text}}
+            {{post.title}}
         </div>
         <div class="card-body">
-            {{post}}
+            {{post.text}}
         </div>
         <div class="card-footer">
             {{post.timestamp}}

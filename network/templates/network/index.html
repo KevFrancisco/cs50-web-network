@@ -5,11 +5,11 @@
 <h1>Your Feed</h1>
 
 
-{% for post in all_posts %}
+{% for post in page_obj %}
     <div class="card bg-primary m-3 text-white">
         <div class="card-header d-flex justify-content-between">
-            <div>
-                {{ post }}
+            <div class="h3">
+                {{ post.title }}
             </div>
 
             <div>
@@ -25,6 +25,8 @@
 
         <div class="card-footer d-flex justify-content-between">
             <div>
+                {# TODO #}
+                {# Anothe todo, fetch if the post is liked by the user or not #}
                 <i class="fas fa-thumbs-up mr-2"></i>
                 <i class="far fa-thumbs-up mr-2"></i>
                 {{ post.like_count }} likes
@@ -36,5 +38,53 @@
         </div>
     </div>
 {% endfor %}
+
+<nav aria-label="Post Page Navigation">
+    <div class="pagination">
+        <span class="step-links mx-auto">
+
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for i in page_range %}
+                <li class="page-item {% if i == page_obj.number %} active {% endif %}">
+                    <a class="page-link " href="?page={{ i }}">
+                        {{ i }}
+                    </a>
+                </li>
+                {% endfor %}
+        
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </span>
+    </div>
+</nav>
+{% comment %}
+    <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span> 
+{% endcomment %}
 
 {% endblock %}
