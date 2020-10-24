@@ -1,8 +1,10 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.http import JsonResponse
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from django.core.paginator import Paginator
@@ -85,13 +87,16 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+
 @login_required
 def new_post(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.owner = request.user
+            instance.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             context = {
@@ -105,6 +110,7 @@ def new_post(request):
         }
 
         return render(request, "network/new_post.html", context)
+
 
 @login_required
 def user_profile(request, user_id):
@@ -123,6 +129,7 @@ def user_profile(request, user_id):
 
     return render(request, "network/user_profile.html", context)
 
+
 @login_required
 def follow_toggle(request, user_id):
     u = User.objects.get(pk=user_id)
@@ -134,6 +141,40 @@ def follow_toggle(request, user_id):
                             following=u,
                             followed_by=request.user
                         )
-
-
     return HttpResponseRedirect(reverse("user_profile"), kwargs={'user_id':request.user.id})
+
+
+@login_required
+def like_post(request):
+    if request.method == "PUT":
+        # Referenced from how project 3: mail handles json requests
+        data = json.loads(request.body)
+
+        post = Post.objects.filter(pk=data.get("id")).first()
+        user = request.user
+
+        like = Like.objects.filter(
+                                post=post,
+                                liker=user).first()
+        if not like:
+            Like.objects.create(
+                        post=post,
+                        liker=user,
+            )
+            return JsonResponse({
+                            "like": "Post liked :)",
+                            "id": data.get("id"),
+                            "new_like": True
+                        }, 
+                        status=201)
+        else:
+            like.delete()
+            return JsonResponse({
+                            "like": "Post unliked",
+                            "new_like": False,                            
+                        },
+                        status=201)
+    
+    return JsonResponse({
+            "error": "Invalid Request :("
+        }, status=400)

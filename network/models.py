@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.forms import ModelForm
+from django import forms
 
 
 class User(AbstractUser):
@@ -32,7 +33,11 @@ class Post(models.Model):
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ['owner']
+        widgets = {
+            'text': forms.widgets.Textarea()
+        }
     # No changes for now, later on this can change
     # If truly no changes, let's try using thet ModelForm Factory function
 

@@ -22,7 +22,7 @@
         <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
 	        OverlayScrollbars(document.querySelectorAll("body"), { });
-        });     
+        });
         </script>
 
         {# Font Awesome is awesome #}
@@ -40,14 +40,24 @@
         {# Livereload #}
         <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
 
+        {# Masonry #}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+
+        {# Google Font: Righteous #}
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+
+        {# js-cookie: for sending the csrf token (for likes) in the fetch request #}
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
     </head>
     <body>
 
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
             <div class="h-100 d-flex">
-                <img src="{% static 'network/logo.png' %}" class="img-fluid mr-3 navbar-logo" alt="">
+                <div class="rounded-circle p-1 bg-light mr-2">
+                    <img src="{% static 'network/logo.png' %}" class="img-fluid navbar-logo" alt="">
+                </div>
                 <div class="my-auto">
-                    <a class="navbar-brand" href="#">Network</a>
+                    <a class="font-brand h3 d-block my-auto text-decoration-none mr-4" href="#">Network</a>
                 </div>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-content" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +95,7 @@
               <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                     <li class="nav-item text-right">
-                        Logged in as
+                        <span class="text-white">Logged in as</span>
                         <a class="nav-link p-0" href="{% url 'user_profile' user.id %}"><strong>{{ request.user.username }}</strong></a>
                     </li>
                     {% endif %}

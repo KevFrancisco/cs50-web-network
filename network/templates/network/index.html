@@ -1,43 +1,72 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
 
-<h1>Your Feed</h1>
+<script src="{% static 'network/js/like_post.js' %}">
+</script>
 
+<div class="m-3 bg-success p-3 border border-success">
+    <h3 class="m-0">Hi {{ request.user.first_name }}, see what's happening now</h3>
+</div>
 
-{% for post in page_obj %}
-    <div class="card bg-primary m-3 text-white">
-        <div class="card-header d-flex justify-content-between">
-            <div class="h3">
-                {{ post.title }}
-            </div>
+{# Masonry Demo by bootstrap: https://v5.getbootstrap.com/docs/5.0/examples/masonry/ #}
 
-            <div>
-                Posted by : <a href="{% url 'user_profile' post.owner.id %}">{{ post.owner }}</a>
-            </div>
-        </div>
+<div class="m-3">
+    <div class="row"  data-masonry='{"percentPosition": true }'>
+    {% for post in page_obj %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            
+            <div class="card text-white w-100 bg-primary">
+                <div class="card-header">
+                    <div class="h5">
+                        {{ post.title }}
+                    </div>
+
+                    <div class="small card-text">
+                        Posted by:
+                        <a href="{% url 'user_profile' post.owner.id %}">{{ post.owner.get_full_name }}</a>
+                        <br>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+
+                    <div class="">
+                        {% if post.image %}
+                            <img class="img-fluid post-image" src="..{{ post.image.url }}" alt="{{ post.text }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="text-left">
+                        {{post.text}}
+                    </div>
+                </div>
         
-        <div class="card-body text-center">
-            {% if post.image %}
-                <img class="img-fluid w-50" src="..{{ post.image.url }}" alt="{{ post.text }}">
-            {% endif %}
-        </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <div class="text-muted small">
+                        {{post.timestamp|timesince}} ago
+                        <br>
+                        {{ post.timestamp|date:"n-d-y g:i a" }}
+                    </div>
 
-        <div class="card-footer d-flex justify-content-between">
-            <div>
-                {# TODO #}
-                {# Anothe todo, fetch if the post is liked by the user or not #}
-                <i class="fas fa-thumbs-up mr-2"></i>
-                <i class="far fa-thumbs-up mr-2"></i>
-                {{ post.like_count }} likes
-            </div>
+                    <button onclick="like_post({{post.id}})" class="h-auto my-auto btn btn-warning">
+                        {# TODO #}
+                        {# Another todo, fetch if the post is liked by the user or not #}
+                            <span onclick="likepost({{post.id}})" class="mr-2">
+                                <i id="liked" class="far fa-thumbs-up"></i>
+                            </span>
 
-            <div class="text-muted">
-                {{ post.timestamp }} - {{post.timestamp|timesince}} ago
+                            <span id="like-count-{{post.id}}">{{ post.like_count }}</span> likes
+                    </button>
+                </div>
             </div>
+    
         </div>
+    {% endfor %}
     </div>
-{% endfor %}
+</div>
+
 
 <nav aria-label="Post Page Navigation">
     <div class="pagination">
