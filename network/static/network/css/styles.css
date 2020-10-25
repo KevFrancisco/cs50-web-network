@@ -13,3 +13,15 @@
 #liked {
     cursor: pointer;
 }
+
+.grid-item-content {
+    transition: width 0.3s, height 0.3s;
+}
+
+.prewrap {
+    white-space: pre;
+}
+
+textarea, .post-text {
+    min-height: 30px;
+}

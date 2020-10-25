@@ -1,7 +1,7 @@
 // Initialize Popover for Bootstrap since feature is opt-in
 // Add generic attr for all popovers, then only show for new likes
 $(function () {
-    $('[data-toggle="popover"]').popover({
+    $('[data-toggle="popover-like"]').popover({
         content:'Liked!',
         container:'body',
         placement:'top',
@@ -51,7 +51,7 @@ function like_post(id) {
 
             // Show the popover, then hide after delay
             $(function () {
-                var pop = $(button_el);
+                let pop = $(button_el);
                 pop.popover("show") 
                 pop.on('shown.bs.popover',function() { 
                     setTimeout(function() {

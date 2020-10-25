@@ -187,3 +187,27 @@ def like_post(request):
     return JsonResponse({
             "error": "Invalid Request :("
         }, status=400)
+
+@login_required
+def edit_post(request):
+    if request.method =="PUT":
+        data = json.loads(request.body)
+
+        post = Post.objects.filter(pk=data.get("id")).first()
+        new_content = data.get("text")
+
+        if post:
+            post.text = new_content
+            post.save()
+            return JsonResponse({
+                        "edit": "Post edited :)",
+                        "new_content": new_content,
+                        }, 
+                        status=201)
+        else:
+            return JsonResponse({
+                        "error": "Invalid Post"
+                        }, 
+                        status=201)
+
+    return JsonResponse({"error": "Invalid Request"}, status=400)
