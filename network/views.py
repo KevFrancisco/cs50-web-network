@@ -177,6 +177,7 @@ def like_post(request):
             like.delete()
             return JsonResponse({
                             "like": "Post unliked",
+                            "id": data.get("id"),
                             "new_like": False,                            
                         },
                         status=201)

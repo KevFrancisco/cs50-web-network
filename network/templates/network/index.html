@@ -52,12 +52,19 @@
                     </div>
 
                     <button onclick="like_post({{post.id}})"
-                            class="h-auto my-auto btn btn-outline-warning 
-                            {% if post in liked_posts %} active {% endif %}">
+                            id="like-btn-{{post.id}}"
+                            class="h-auto my-auto btn
+                            {% if post in liked_posts %}
+                                btn-warning
+                            {%else%}
+                                btn-outline-secondary
+                            {% endif %}"
+                            data-toggle="popover"
+                            >
                         {# TODO #}
                         {# Another todo, fetch if the post is liked by the user or not #}
                             <span class="mr-1">
-                                <i id="liked-{{post.id}}" class="far fa-thumbs-up"></i>
+                                <i id="liked-icon-{{post.id}}" class="{% if post in liked_posts %} fas {%else%} far {%endif%} fa-thumbs-up"></i>
                             </span>
 
                             <span id="like-count-{{post.id}}">{{ post.like_count }}</span> likes
