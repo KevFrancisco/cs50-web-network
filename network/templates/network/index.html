@@ -10,6 +10,7 @@
     <h3 class="m-0">Hi {{ request.user.first_name }}, see what's happening now</h3>
 </div>
 
+{{ liked_posts }}
 {# Masonry Demo by bootstrap: https://v5.getbootstrap.com/docs/5.0/examples/masonry/ #}
 
 <div class="m-3">
@@ -50,11 +51,13 @@
                         {{ post.timestamp|date:"n-d-y g:i a" }}
                     </div>
 
-                    <button onclick="like_post({{post.id}})" class="h-auto my-auto btn btn-warning">
+                    <button onclick="like_post({{post.id}})"
+                            class="h-auto my-auto btn btn-outline-warning 
+                            {% if post in liked_posts %} active {% endif %}">
                         {# TODO #}
                         {# Another todo, fetch if the post is liked by the user or not #}
-                            <span onclick="likepost({{post.id}})" class="mr-2">
-                                <i id="liked" class="far fa-thumbs-up"></i>
+                            <span class="mr-1">
+                                <i id="liked-{{post.id}}" class="far fa-thumbs-up"></i>
                             </span>
 
                             <span id="like-count-{{post.id}}">{{ post.like_count }}</span> likes

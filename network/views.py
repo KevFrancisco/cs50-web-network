@@ -21,12 +21,18 @@ def index(request):
                         .annotate(like_count=Count('likes'))
                         .order_by('-timestamp')
                 )
+
+    likes_by_user = (Like.objects.filter(liker=request.user))
+
+    liked_posts = Post.objects.filter(likes__in=likes_by_user)
+        
     paginator = Paginator(all_posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
     context = {
         'all_posts': all_posts,
+        'liked_posts': liked_posts,
         'page_obj': page_obj,
         'page_number': page_number,
         'page_range': paginator.page_range
