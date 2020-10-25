@@ -1,8 +1,29 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
 
-<h1>User Profile for {{  profile_owner.username }}</h1>
+
+{% if profile_owner == request.user %}
+    <div class="bg-info px-3 py-1 text-right">
+        <h4 class="m-0 text-primary"> 
+            My User Profile
+        </h4>
+    </div>
+{% else %}
+    {# TODO #}
+    {# Use Fetch to Get this Value - if followed or not #}
+    <h1>User Profile for {{  profile_owner.username }}</h1>
+
+    {% if profile_owner in followers.followed_by %}
+        <a href='{% url 'follow_toggle' profile_owner.id %}'>Unfollow</a>
+    {% else %}
+        <a href='{% url 'follow_toggle' profile_owner.id %}'>Follow</a>
+    {%endif%}
+{% endif %}
+
+<hr>
+{# Following and Follower Links #}
 
 <div class="badge">
     Following: {{ profile_owner.following.count }}
@@ -16,35 +37,11 @@
     {{ followers }}
 </div>
 
-{% if profile_owner == request.user %}
-    ME!
-{% else %}
-    {# TODO #}
-    {# Use Fetch to Get this Value - if followed or not #}
-    {% if profile_owner in followers.followed_by %}
-        <a href='{% url 'follow_toggle' profile_owner.id %}'>Unfollow</a>
-    {% else %}
-        <a href='{% url 'follow_toggle' profile_owner.id %}'>Follow</a>
-    {%endif%}
-{% endif %}
-
 <hr>
 
-<h3>Posts by {{ profile_owner }}</h3>
+<h3>{% if request.user == profile_owner %} Your Posts {% else %} Posts by {{ profile_owner }} {% endif %}</h3>
 
+{% include "network/posts-masonry.html" %}
 
-{% for post in posts %}
-    <div class="card bg-light m-3">
-        <div class="card-header">
-            {{post.title}}
-        </div>
-        <div class="card-body">
-            {{post.text}}
-        </div>
-        <div class="card-footer">
-            {{post.timestamp}}
-        </div>
-    </div>
-{% endfor %}
 
 {% endblock %}

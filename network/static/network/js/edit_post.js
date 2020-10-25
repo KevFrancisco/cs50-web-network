@@ -12,7 +12,7 @@ function edit_post(id) {
     let edit_textarea = document.createElement('textarea');
         edit_textarea.classList.add('w-100', 'form-control', 'form-control-sm');
         edit_textarea.id = 'post-textarea-' + id
-        edit_textarea.style.height = post_text_div.clientHeight + 80 + "px";
+        edit_textarea.style.height = post_text_div.clientHeight + "px";
         edit_textarea.innerHTML = post_text_div.innerText;
 
     post_text_div.innerHTML = '';
@@ -123,7 +123,7 @@ function send_edited_post(id, new_text) {
                 pop.popover("show") 
                 pop.on('shown.bs.popover',function() { 
                     setTimeout(function() {
-                    pop.popover("hide")}, 1500); 
+                    pop.popover("hide")}, 350); 
                 })
             })
         }

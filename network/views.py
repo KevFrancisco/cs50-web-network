@@ -16,21 +16,31 @@ from network.models import PostForm, User, Post, Like, Follower
 
 
 def index(request):
-    all_posts = (Post.objects
-                        .all()
-                        .annotate(like_count=Count('likes'))
-                        .order_by('-timestamp')
-                )
+    # Get all Posts
+    all_posts = (Post.objects.all()
+                    .annotate(like_count=Count('likes'))
+                    .order_by('-timestamp'))
 
-    likes_by_user = (Like.objects.filter(liker=request.user))
-    liked_posts = Post.objects.filter(likes__in=likes_by_user)
+    # Explicitly declare to None, this hides all the [edit buttons] and [active like]
+    # indicators in the index view if the user is AnonUser (aka unauthenticated user)
+    liked_posts = None
+    owned_posts = None
 
-    owned_posts = Post.objects.filter(owner=request.user)
-        
+    # If the user is authenticated, we shadw the context with a list of their likes
+    # and which posts they own, then we filter the template like so:
+    # if [posts] in [owned_posts] then show edit button
+    if request.user.is_authenticated:
+        likes_by_user = (Like.objects.filter(liker=request.user))
+        liked_posts = Post.objects.filter(likes__in=likes_by_user)
+        owned_posts = Post.objects.filter(owner=request.user)
+    
+    # Paginator, show ten (10) posts only per viewing, taken from django docs example
+    # https://docs.djangoproject.com/en/3.1/topics/pagination/
     paginator = Paginator(all_posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
+    # Pass the contexts neatly :D
     context = {
         'all_posts': all_posts,
         'liked_posts': liked_posts,
@@ -39,7 +49,6 @@ def index(request):
         'page_number': page_number,
         'page_range': paginator.page_range
     }
-
 
     return render(request, "network/index.html", context)
 
@@ -122,15 +131,39 @@ def new_post(request):
 
 @login_required
 def user_profile(request, user_id):
-    user = User.objects.get(pk=user_id)
-    posts = Post.objects.filter(owner=user).order_by('-timestamp')
+    # Get the user requested in the url and their posts
+    profile_user = User.objects.get(pk=user_id)
+    posts = (Post.objects
+                    .filter(owner=profile_user)
+                    .annotate(like_count=Count('likes'))
+                    .order_by('-timestamp'))
 
-    followers = Follower.objects.filter(followed_by=user)
-    following = Follower.objects.filter(following=user)
+    # Since the template uses these contexts by default, we also need to import this
+    # TODO Refactor to minimize db querying
+    # Maybe we can remove this if the request is for a user profile and we can filter inline
+    likes_by_user = (Like.objects.filter(liker=request.user))
+    liked_posts = Post.objects.filter(likes__in=likes_by_user)
+    owned_posts = Post.objects.filter(owner=profile_user)
+
+    # Paginator... Requirment was 10 posts per page
+    # Bet I can make an infinite scrolling version ala pinterest :P
+    # Personally, in don't like pagination from a usability standpoint... :/
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # TODO Get Follower + Following counts and list em out for easy access
+    following = Follower.objects.filter(followed_by=profile_user)
+    followers = Follower.objects.filter(following=profile_user)
 
     context = {
-        'profile_owner': user,
-        'posts': posts,
+        'profile_owner': profile_user,
+        'all_posts': posts,
+        'liked_posts': liked_posts,
+        'owned_posts': owned_posts,
+        'page_obj': page_obj,
+        'page_number': page_number,
+        'page_range': paginator.page_range,
         'followers': followers,
         'following': following,
     }
@@ -195,6 +228,13 @@ def edit_post(request):
 
         post = Post.objects.filter(pk=data.get("id")).first()
         new_content = data.get("text")
+        
+        if post.owner != request.user:
+            return JsonResponse({
+                        "error": "Forbidden, Only the owner may edit a post",
+                        "owner": post.owner.id
+                        }, 
+                        status=403)
 
         if post:
             post.text = new_content
@@ -211,3 +251,36 @@ def edit_post(request):
                         status=201)
 
     return JsonResponse({"error": "Invalid Request"}, status=400)
+
+@login_required
+def following(request):
+    # Get the user requested in the url and their posts
+    follows_by_user = Follower.objects.filter(followed_by=request.user)
+    followed_users = User.objects.filter(following__in=follows_by_user)
+    posts = (Post.objects
+                    .filter(owner__in=followed_users)
+                    .annotate(like_count=Count('likes'))
+                    .order_by('-timestamp'))
+
+    # Owned is none, since this view is for posts by followed users
+    # We own nothing here!
+    likes_by_user = (Like.objects.filter(liker=request.user))
+    liked_posts = Post.objects.filter(likes__in=likes_by_user)
+    owned_posts = None
+
+    # We meet again mr. paginator
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Nice and neat!
+    context = {
+        'all_posts': posts,
+        'liked_posts': liked_posts,
+        'owned_posts': owned_posts,
+        'page_obj': page_obj,
+        'page_number': page_number,
+        'page_range': paginator.page_range,
+    }
+
+    return render(request, "network/following.html", context)

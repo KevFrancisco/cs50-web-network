@@ -19,7 +19,7 @@
 }
 
 .prewrap {
-    white-space: pre;
+    white-space: pre-line;
 }
 
 textarea, .post-text {

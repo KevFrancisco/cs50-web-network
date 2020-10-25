@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+{# Header #}
+<div class="bg-warning px-3 py-1 text-right">
+    <h4 class="m-0 text-primary">
+        By the people you follow
+    </h4>
+</div>
+
+{% include "network/posts-masonry.html" %}
+
+{% endblock %}
