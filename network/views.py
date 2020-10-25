@@ -23,8 +23,9 @@ def index(request):
                 )
 
     likes_by_user = (Like.objects.filter(liker=request.user))
-
     liked_posts = Post.objects.filter(likes__in=likes_by_user)
+
+    owned_posts = Post.objects.filter(owner=request.user)
         
     paginator = Paginator(all_posts, 10)
     page_number = request.GET.get('page')
@@ -33,6 +34,7 @@ def index(request):
     context = {
         'all_posts': all_posts,
         'liked_posts': liked_posts,
+        'owned_posts': owned_posts,
         'page_obj': page_obj,
         'page_number': page_number,
         'page_range': paginator.page_range
