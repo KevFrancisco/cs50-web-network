@@ -1,94 +1,96 @@
 {% load static %}
 
 {# Masonry Demo by bootstrap: https://v5.getbootstrap.com/docs/5.0/examples/masonry/ #}
-<div class="m-3">
+<div class="m-3 py-3">
     <div class="grid">
         <div class="grid-sizer col-md-6 col-lg-4 col-xl-3"></div>
 
         {% for post in page_obj %}
             <div class="grid-item col-md-6 col-lg-4 col-xl-3 mb-4" id="post-card-{{post.id}}">
                 
-                <div class="grid-item-content card text-white w-100 bg-primary">
-
-                    {# CARD HEADER #}
-                    <div class="card-header">
-
-                        {# POST TITLE #}
-                        <div class="h5 mb-0">
-                            {{ post.title }}
+                <div class="p-2 grid-item-content w-100">
+                    <div class="card text-white bg-primary">
+    
+                        {# CARD HEADER #}
+                        <div class="card-header bg-darkerer">
+    
+                            {# POST TITLE #}
+                            <div class="h4 mb-0 font-brand">
+                                {{ post.title }}
+                            </div>
+    
+                            {# POST OWNER #}
+                            <div class="small text-muted">
+                                Posted by:
+                                <a class="badge badge-info" href="{% url 'user_profile' post.owner.id %}">{{ post.owner.get_full_name }}</a>
+                                <br>
+                            </div>
                         </div>
-
-                        {# POST OWNER #}
-                        <div class="small text-muted">
-                            Posted by:
-                            <a class="badge badge-info" href="{% url 'user_profile' post.owner.id %}">{{ post.owner.get_full_name }}</a>
-                            <br>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-
-                        {# CARD IMAGE #}
-                        <div class="text-center">
-                            {% if post.image %}
-                                <img class="img-fluid post-image mb-3" src="..{{ post.image.url }}" alt="{{ post.text }}">
+                        
+                        <div class="card-body">
+    
+                            {# CARD IMAGE #}
+                            <div class="text-center">
+                                {% if post.image %}
+                                    <img class="img-fluid post-image mb-3" src="..{{ post.image.url }}" alt="{{ post.text }}">
+                                {% endif %}
+                            </div>
+                            
+                            {# CARD TEXT #}
+                            <div class="text-left post-text prewrap" id="post-text-{{post.id}}">{{post.text}}</div>
+    
+                            {# EDIT BUTTON #}
+                            {% if post in owned_posts and user.is_authenticated %}
+                            <div>
+                                <button id="edit-save-btn-{{post.id}}" 
+                                        class="btn btn-warning btn-sm w-100 mt-3" 
+                                        onclick="edit_post({{post.id}})"
+                                        data-toggle="popover-edit-save">Edit
+                                </button>
+                            </div>
+                            <div>
+                                <button id="delete-btn-{{post.id}}" 
+                                        class="btn btn-danger btn-sm w-100 mt-2" 
+                                        onclick="delete_post({{post.id}})"
+                                        data-toggle="popover-delete">Delete
+                                </button>
+                            </div>
                             {% endif %}
                         </div>
-                        
-                        {# CARD TEXT #}
-                        <div class="text-left post-text prewrap" id="post-text-{{post.id}}">{{post.text}}</div>
-
-                        {# EDIT BUTTON #}
-                        {% if post in owned_posts and user.is_authenticated %}
-                        <div>
-                            <button id="edit-save-btn-{{post.id}}" 
-                                    class="btn btn-warning btn-sm w-100 mt-3" 
-                                    onclick="edit_post({{post.id}})"
-                                    data-toggle="popover-edit-save">Edit
+    
+                        {# CARD FOOTER #}
+                        <div class="card-footer bg-darker d-flex justify-content-between">
+                            {# Timestamp #}
+                            <div class="text-muted small">
+                                {{post.timestamp|timesince}} ago
+                                <br>
+                                {{ post.timestamp|date:"n-d-y g:i a" }}
+                            </div>
+                            
+                            {# Like Button #}
+                            <button {% if user.is_authenticated %}
+                                    onclick="like_post({{post.id}})"
+                                    {% endif %}
+                                    id="like-btn-{{post.id}}"
+                                    class="h-auto my-auto btn
+                                    {% if post in liked_posts %}
+                                        btn-warning
+                                    {%else%}
+                                        btn-outline-secondary
+                                    {% endif %}"
+                                    data-toggle="popover-like"
+                                    >
+    
+                                    <span class="mr-1">
+                                        <i id="liked-icon-{{post.id}}" 
+                                           class="{% if post in liked_posts %} fas {%else%} far {%endif%} fa-thumbs-up">
+                                        </i>
+                                    </span>
+    
+                                    <span id="like-count-{{post.id}}">{{ post.like_count }}</span> likes
                             </button>
+    
                         </div>
-                        <div>
-                            <button id="delete-btn-{{post.id}}" 
-                                    class="btn btn-danger btn-sm w-100 mt-2" 
-                                    onclick="delete_post({{post.id}})"
-                                    data-toggle="popover-delete">Delete
-                            </button>
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    {# CARD FOOTER #}
-                    <div class="card-footer d-flex justify-content-between">
-                        {# Timestamp #}
-                        <div class="text-muted small">
-                            {{post.timestamp|timesince}} ago
-                            <br>
-                            {{ post.timestamp|date:"n-d-y g:i a" }}
-                        </div>
-                        
-                        {# Like Button #}
-                        <button {% if user.is_authenticated %}
-                                onclick="like_post({{post.id}})"
-                                {% endif %}
-                                id="like-btn-{{post.id}}"
-                                class="h-auto my-auto btn
-                                {% if post in liked_posts %}
-                                    btn-warning
-                                {%else%}
-                                    btn-outline-secondary
-                                {% endif %}"
-                                data-toggle="popover-like"
-                                >
-
-                                <span class="mr-1">
-                                    <i id="liked-icon-{{post.id}}" 
-                                       class="{% if post in liked_posts %} fas {%else%} far {%endif%} fa-thumbs-up">
-                                    </i>
-                                </span>
-
-                                <span id="like-count-{{post.id}}">{{ post.like_count }}</span> likes
-                        </button>
-
                     </div>
                 </div>
         

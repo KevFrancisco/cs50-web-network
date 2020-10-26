@@ -25,3 +25,11 @@
 textarea, .post-text {
     min-height: 30px;
 }
+
+.bg-darker {
+    background-color: rgba(33, 33, 33, 0.15);
+}
+
+.bg-darkerer {
+    background-color: rgba(33, 33, 33, 0.5);
+}

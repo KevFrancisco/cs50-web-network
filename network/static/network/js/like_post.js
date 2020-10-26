@@ -12,7 +12,7 @@ $(function () {
 function like_post(id) {
     let csrftoken = Cookies.get('csrftoken');
     let url = '../post/like';
-    let data = {'id':id}
+    let data = {'id':id};
 
     fetch(url, {
         method: "PUT",

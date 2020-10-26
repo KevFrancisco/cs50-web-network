@@ -2,8 +2,16 @@
 
 {% block body %}
 
-    <div class="container">
-        <h2>Login</h2>
+{# Header #}
+<div class="bg-success px-3 py-1 text-right">
+    <h4 class="m-0 text-primary">
+        Login in to your account
+    </h4>
+</div>
+
+
+    <div class="container p-3">
+        <h1 class="font-brand text-primary">Login</h1>
     
         {% if message %}
             <div>{{ message }}</div>
@@ -17,10 +25,12 @@
             <div class="form-group">
                 <input class="form-control" type="password" name="password" placeholder="Password">
             </div>
-            <input class="btn btn-primary" type="submit" value="Login">
+            <input class="btn btn-success w-100 mt-3" type="submit" value="Login">
         </form>
     
-        Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+        <div class="text-center mt-2">
+            Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+        </div>
     </div>
 
 {% endblock %}

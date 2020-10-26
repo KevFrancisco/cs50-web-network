@@ -139,7 +139,7 @@ def user_profile(request, user_id):
                     .order_by('-timestamp'))
 
     # Since the template uses these contexts by default, we also need to import this
-    # TODO Refactor to minimize db querying
+    # Refactor to minimize db querying
     # Maybe we can remove this if the request is for a user profile and we can filter inline
     likes_by_user = (Like.objects.filter(liker=request.user))
     liked_posts = Post.objects.filter(likes__in=likes_by_user)
@@ -152,9 +152,13 @@ def user_profile(request, user_id):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # TODO Get Follower + Following counts and list em out for easy access
+    # Get Follower + Following counts and list em out for easy access
     following = Follower.objects.filter(followed_by=profile_user)
     followers = Follower.objects.filter(following=profile_user)
+    # Get a qset of users that follow the profile owner for templating
+    user_followers = (User.objects.filter(
+                                followed_by__in=followers
+    ))
 
     context = {
         'profile_owner': profile_user,
@@ -166,25 +170,50 @@ def user_profile(request, user_id):
         'page_range': paginator.page_range,
         'followers': followers,
         'following': following,
+        'user_followers': user_followers,
     }
 
     return render(request, "network/user_profile.html", context)
 
 
 @login_required
-def follow_toggle(request, user_id):
-    u = User.objects.get(pk=user_id)
-    f = Follower.objects.filter(following=u,followed_by=request.user)
-    if f.exists():
-        f.delete()
-    else:
-        Follower.objects.create(
-                            following=u,
-                            followed_by=request.user
-                        )
-    # return HttpResponseRedirect(reverse("user_profile"), kwargs={'user_id':request.user.id})
-    return HttpResponseRedirect(request.url)
+def follow_toggle(request):
+    if request.method == "PUT":
+        # Get the JSON data
+        data = json.loads(request.body)
+        to_follow_id = data.get("to_follow_id")
+        
+        # The user object to follow
+        u_to_follow = User.objects.filter(pk=to_follow_id).first()
+        f = (Follower.objects.filter(
+                            following=u_to_follow,
+                            followed_by=request.user)
+                            .first())
+        
+        # Check if the follow already exists or not
+        if f:
+            f.delete()
+            return JsonResponse({
+                        "Status": "Success! User Unfollowed",
+                        "u_to_follow": u_to_follow.username,
+                        "new_follow": False,
+                        },
+                        status=200)
+        else:
+            Follower.objects.create(
+                            following=u_to_follow,
+                            followed_by=request.user)
+            return JsonResponse({
+                        "Status": "Success! User Followed",
+                        "u_to_follow": u_to_follow.username,
+                        "new_follow": True,
+                        },
+                        status=201)
 
+    # Only accept PUT requests
+    return JsonResponse({
+        "error": "Invalid Request :("
+    }, status=400)
 
 @login_required
 def like_post(request):

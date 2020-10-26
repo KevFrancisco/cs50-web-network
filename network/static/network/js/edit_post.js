@@ -32,7 +32,7 @@ function edit_post(id) {
 
     // Replace the Edit Button with save
     let edit_save_btn = document.getElementById('edit-save-btn-' + id);
-        edit_save_btn.classList.remove('btn-danger');
+        edit_save_btn.classList.remove('btn-warning');
         edit_save_btn.classList.add('btn-success');
         edit_save_btn.innerText = 'Save';
         edit_save_btn.onclick = function () {
@@ -49,7 +49,7 @@ function send_edited_post(id, new_text) {
     // Replace the save button
     let edit_save_btn = document.getElementById('edit-save-btn-' + id);
         edit_save_btn.classList.remove('btn-success');
-        edit_save_btn.classList.add('btn-danger');
+        edit_save_btn.classList.add('btn-warning');
         edit_save_btn.innerText = 'Edit';
         edit_save_btn.onclick = function () {
             edit_post(id);
@@ -90,43 +90,6 @@ function send_edited_post(id, new_text) {
     .then(Response => Response.json())
     .then(result => {
         console.log(result);
-        
-        let button_span_id = 'like-count-' + id;
-        let button_span_el = document.getElementById(button_span_id)
-        let liked_icon_id = 'liked-icon-' + id;
-        let liked_icon_el = document.getElementById(liked_icon_id);
-        let liked = result["new_like"];
-        let like_num = button_span_el.innerText;
-        
-        // Make the popover
-        let button_id = 'like-btn-' + id;
-        $('button_id').popover({
-            content:"Liked!",
-            placement:"top",
-            trigger:"focus"
-        });
-        // Get the el to popover
-        let button_el = document.getElementById(button_id);
-    
-        if (liked == true) {
-            button_span_el.innerText = parseInt(like_num + 1);
-
-            button_el.classList.remove('btn-outline-secondary');
-            button_el.classList.add('btn-warning');
-
-            liked_icon_el.classList.remove('far');
-            liked_icon_el.classList.add('fas');
-
-            // Show the popover, then hide after delay
-            $(function () {
-                let pop = $(button_el);
-                pop.popover("show") 
-                pop.on('shown.bs.popover',function() { 
-                    setTimeout(function() {
-                    pop.popover("hide")}, 350); 
-                })
-            })
-        }
     });
 
 

@@ -55,8 +55,7 @@ class Like(models.Model):
     def __str__(self):
         return f"{self.post} is liked by {self.liker}"
 
-# FIXME is this model correct?
-# We come back to this later quack
+
 class Follower(models.Model):
     following = models.ForeignKey(
                         User,

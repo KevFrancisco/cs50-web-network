@@ -12,23 +12,43 @@
     </div>
 {% else %}
     <div class="bg-info px-3 py-1 text-right d-flex justify-content-end">
-        {# TODO Follow Link #} 
+
         <div>
-            <div class="badge mr-2 py-2
-                    {% if profile_owner in followers.followed_by %}
-                        badge-danger 
+            <button id="user-follow-{{profile_owner.id}}"
+                    data-toggle="popover-follow"
+                    data-placement="top"
+                    data-trigger="manual"
+                    {% if user in user_followers %}
+                        data-content="Unfollowed!"
                     {% else %}
-                        badge-warning
+                        data-content="Followed!"
+                    {% endif %}
+                    class="btn btn-sm p-0 mr-4 py-1 px-3
+                    {% if user in user_followers %}
+                        btn-danger 
+                    {% else %}
+                        btn-warning
                     {% endif %}
                     ">
-                <a class="text-decoration-none font-weight-bold text-white mx-2" href='{% url 'follow_toggle' profile_owner.id %}'>
-                    {% if profile_owner in followers.followed_by %}
-                        <i class="fas fa-user-minus mr-1"></i>Unfollow
+                <span class="text-decoration-none font-weight-bold text-white mx-2" 
+                    onclick="follow_user({{profile_owner.id}})">
+                    {% if user in user_followers %}
+                        <i id="user-follow-fa-{{profile_owner.id}}"
+                            class="fas fa-user-minus mr-1">
+                        </i>
+                        <span id="user-follow-span-{{profile_owner.id}}">
+                            Unfollow
+                        </span>
                     {% else %}
-                        <i class="fas fa-user-plus mr-1"></i>Follow
+                        <i id="user-follow-fa-{{profile_owner.id}}"
+                            class="fas fa-user-plus mr-1">
+                        </i>
+                        <span id="user-follow-span-{{profile_owner.id}}">
+                            Follow
+                        </span>
                     {%endif%}
-                </a>
-            </div>
+                </span>
+            </button>
         </div>
         
         <div class="h4 font-brand mt-auto mb-0 text-primary">
@@ -59,9 +79,7 @@
                 data-content="
                     {% for u in following %}
                         <div class='btn btn-info btn-sm d-block m-2'>
-                            <a href='{% url 'user_profile' u.following.id %}' class='text-decoration-none text-white px-5 font-body text-nowrap'>
-                                {{ u.following.get_full_name }}
-                            </a>
+                            <a href='{% url 'user_profile' u.following.id %}' class='text-decoration-none text-white px-5 text-nowrap'>{{ u.following.get_full_name }}</a>
                         </div>
                     {% endfor %}
                 "
@@ -80,8 +98,8 @@
                 data-html="true"
                 data-content="
                     {% for u in followers %}
-                        <div class='btn btn-success btn-sm m-2'>
-                            <a href='{% url 'user_profile' u.followed_by.id %}' class='text-decoration-none text-white px-5 font-body text-nowrap'>
+                        <div class='btn btn-success btn-sm d-block m-2'>
+                            <a href='{% url 'user_profile' u.followed_by.id %}' class='text-decoration-none text-white px-5 text-nowrap'>
                                 {{ u.followed_by.get_full_name }}
                             </a>
                         </div>
@@ -95,13 +113,15 @@
     </div>
 </div>
 
+{% include "network/posts-masonry.html" %}
+
+
 <script type="text/javascript">
 $(function () {
   $('[data-toggle="popover"]').popover({  })
 })
 </script>
 
-{% include "network/posts-masonry.html" %}
-
+<script src="{% static 'network/js/follow_user.js' %}"></script>
 
 {% endblock %}
