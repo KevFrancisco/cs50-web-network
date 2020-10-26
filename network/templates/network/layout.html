@@ -42,6 +42,8 @@
 
         {# Masonry #}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+        {# ImagesLoaded #}
+        <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 
         {# Google Font: Righteous + Poppins #}
         <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;700&Comic+Neue:ital,wght@0,400;0,700;1,300&display=swap" rel="stylesheet">
@@ -76,7 +78,7 @@
                             <a class="nav-link" href="{% url 'user_profile' user.id %}">My Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'index' %}">New Post</a>
+                            <a class="nav-link" href="{% url 'new_post' %}">New Post</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'following' %}">Following</a>
