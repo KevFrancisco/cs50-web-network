@@ -182,7 +182,8 @@ def follow_toggle(request, user_id):
                             following=u,
                             followed_by=request.user
                         )
-    return HttpResponseRedirect(reverse("user_profile"), kwargs={'user_id':request.user.id})
+    # return HttpResponseRedirect(reverse("user_profile"), kwargs={'user_id':request.user.id})
+    return HttpResponseRedirect(request.url)
 
 
 @login_required

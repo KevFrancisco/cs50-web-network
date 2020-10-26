@@ -3,7 +3,7 @@
 
 {% block body %}
 
-
+{# Identity Header + Follow/Unfollow Link #}
 {% if profile_owner == request.user %}
     <div class="bg-info px-3 py-1 text-right">
         <h4 class="m-0 text-primary"> 
@@ -11,35 +11,99 @@
         </h4>
     </div>
 {% else %}
-    {# TODO #}
-    {# Use Fetch to Get this Value - if followed or not #}
-    <h1>User Profile for {{  profile_owner.username }}</h1>
-
-    {% if profile_owner in followers.followed_by %}
-        <a href='{% url 'follow_toggle' profile_owner.id %}'>Unfollow</a>
-    {% else %}
-        <a href='{% url 'follow_toggle' profile_owner.id %}'>Follow</a>
-    {%endif%}
+    <div class="bg-info px-3 py-1 text-right d-flex justify-content-end">
+        {# TODO Follow Link #} 
+        <div>
+            <div class="badge mr-2 py-2
+                    {% if profile_owner in followers.followed_by %}
+                        badge-danger 
+                    {% else %}
+                        badge-warning
+                    {% endif %}
+                    ">
+                <a class="text-decoration-none font-weight-bold text-white mx-2" href='{% url 'follow_toggle' profile_owner.id %}'>
+                    {% if profile_owner in followers.followed_by %}
+                        <i class="fas fa-user-minus mr-1"></i>Unfollow
+                    {% else %}
+                        <i class="fas fa-user-plus mr-1"></i>Follow
+                    {%endif%}
+                </a>
+            </div>
+        </div>
+        
+        <div class="h4 font-brand mt-auto mb-0 text-primary">
+            {{  profile_owner.get_full_name }}'s Profile
+        </div>
+    </div>
 {% endif %}
 
-<hr>
-{# Following and Follower Links #}
+{# Page Title + Follower/Following stats #}
+<div class="m-3 px-3 d-flex">
+    <div class="mr-3">
+        <h3 class="m-0">
+            {% if request.user == profile_owner %}
+                Your Posts
+            {% else %}
+                Posts by {{ profile_owner }}
+            {% endif %}
+        </h3>
+    </div>
 
-<div class="badge">
-    Following: {{ profile_owner.following.count }}
-    <br>
-    {{ following }}
+    {# Following and Follower Indicator #}
+    <div class="my-auto">
+        <a class="font-weight-bold btn btn-sm btn-warning px-5 mr-2"
+            {% if following %}
+                data-toggle="popover"
+                data-placement="bottom"
+                data-html="true"
+                data-content="
+                    {% for u in following %}
+                        <div class='mx-3 my-2'>
+                            <a href='{% url 'user_profile' u.following.id %}' class='text-decoration-none'>
+                                {{ u.following.get_full_name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                "
+            {% endif %}
+            >
+            <i class="fas fa-user-tag mr-2"></i>
+            Following: {{ profile_owner.followed_by.count }}
+        </a>
+    </div>
+
+    <div class="my-auto">
+        <a class="font-weight-bold btn btn-sm btn-info px-5"
+            {% if followers %}
+                data-toggle="popover"
+                data-placement="bottom"
+                data-html="true"
+                data-content="
+                    {% for u in followers %}
+                        <div class='mx-3 my-2'>
+                            <a href='{% url 'user_profile' u.followed_by.id %}' class='text-decoration-none'>
+                                {{ u.followed_by.get_full_name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                "
+            {% endif %}
+            >
+            <i class="fas fa-users mr-2"></i>
+            Followers: {{ profile_owner.following.count }}
+        </a>
+    </div>
 </div>
 
-<div class="badge">
-    Followers: {{ profile_owner.followed_by.count }}
-    <br>
-    {{ followers }}
-</div>
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="popover"]').popover({  })
+})
+</script>
 
-<hr>
-
-<h3>{% if request.user == profile_owner %} Your Posts {% else %} Posts by {{ profile_owner }} {% endif %}</h3>
+{{ following }}
+<br>
+{{ followers }}
 
 {% include "network/posts-masonry.html" %}
 
