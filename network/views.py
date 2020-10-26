@@ -42,6 +42,7 @@ def index(request):
 
     # Pass the contexts neatly :D
     context = {
+        'form': PostForm,
         'all_posts': all_posts,
         'liked_posts': liked_posts,
         'owned_posts': owned_posts,
@@ -130,9 +131,9 @@ def new_post(request):
 
 
 @login_required
-def user_profile(request, user_id):
+def user_profile(request, profile_user_id):
     # Get the user requested in the url and their posts
-    profile_user = User.objects.get(pk=user_id)
+    profile_user = User.objects.get(pk=profile_user_id)
     posts = (Post.objects
                     .filter(owner=profile_user)
                     .annotate(like_count=Count('likes'))
@@ -143,7 +144,7 @@ def user_profile(request, user_id):
     # Maybe we can remove this if the request is for a user profile and we can filter inline
     likes_by_user = (Like.objects.filter(liker=request.user))
     liked_posts = Post.objects.filter(likes__in=likes_by_user)
-    owned_posts = Post.objects.filter(owner=profile_user)
+    owned_posts = Post.objects.filter(owner=request.user)
 
     # Paginator... Requirment was 10 posts per page
     # Bet I can make an infinite scrolling version ala pinterest :P
@@ -215,6 +216,7 @@ def follow_toggle(request):
         "error": "Invalid Request :("
     }, status=400)
 
+
 @login_required
 def like_post(request):
     if request.method == "PUT":
@@ -251,6 +253,7 @@ def like_post(request):
             "error": "Invalid Request :("
         }, status=400)
 
+
 @login_required
 def edit_post(request):
     if request.method =="PUT":
@@ -261,7 +264,7 @@ def edit_post(request):
         
         if post.owner != request.user:
             return JsonResponse({
-                        "error": "Forbidden, Only the owner may edit a post",
+                        "error": "Forbidden, Only the post owner may edit a post",
                         "owner": post.owner.id
                         }, 
                         status=403)
@@ -281,6 +284,7 @@ def edit_post(request):
                         status=400)
 
     return JsonResponse({"error": "Invalid Request"}, status=400)
+
 
 @login_required
 def delete_post(request):

@@ -76,7 +76,7 @@ function send_edited_post(id, new_text) {
 
     // Init vars for easier handling *huff!*
     let csrftoken = Cookies.get('csrftoken');
-    let url = 'post/edit';
+    let url = '../post/edit';
     let data = {
             'id':id,
             'text':new_text
