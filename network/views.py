@@ -249,9 +249,38 @@ def edit_post(request):
             return JsonResponse({
                         "error": "Invalid Post"
                         }, 
-                        status=201)
+                        status=400)
 
     return JsonResponse({"error": "Invalid Request"}, status=400)
+
+@login_required
+def delete_post(request):
+    if request.method =="PUT":
+        data = json.loads(request.body)
+
+        post = Post.objects.filter(pk=data.get("id")).first()
+        
+        if post.owner != request.user:
+            return JsonResponse({
+                        "error": "Forbidden, Only the owner may edit a post",
+                        "owner": post.owner.id
+                        }, 
+                        status=403)
+
+        if post:
+            post.delete()
+            return JsonResponse({
+                        "edit": "Post deleted!",
+                        }, 
+                        status=201)
+        else:
+            return JsonResponse({
+                        "error": "Invalid Post"
+                        }, 
+                        status=400)
+
+    return JsonResponse({"error": "Invalid Request"}, status=400)
+
 
 @login_required
 def following(request):

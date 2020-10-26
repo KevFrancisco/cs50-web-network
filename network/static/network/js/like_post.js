@@ -11,7 +11,7 @@ $(function () {
 
 function like_post(id) {
     let csrftoken = Cookies.get('csrftoken');
-    let url = 'post/like';
+    let url = '../post/like';
     let data = {'id':id}
 
     fetch(url, {
@@ -25,6 +25,7 @@ function like_post(id) {
         
         let button_span_id = 'like-count-' + id;
         let button_span_el = document.getElementById(button_span_id)
+        let like_count = parseInt(button_span_el.innerText);
         let liked_icon_id = 'liked-icon-' + id;
         let liked_icon_el = document.getElementById(liked_icon_id);
         let liked = result["new_like"];
@@ -41,7 +42,8 @@ function like_post(id) {
         let button_el = document.getElementById(button_id);
     
         if (liked == true) {
-            button_span_el.innerText = parseInt(like_num + 1);
+            like_count += 1;
+            button_span_el.innerText = like_count;
 
             button_el.classList.remove('btn-outline-secondary');
             button_el.classList.add('btn-warning');
@@ -59,7 +61,8 @@ function like_post(id) {
                 })
             })
         } else {
-            button_span_el.innerText = parseInt(like_num - 1);
+            like_count -= 1;
+            button_span_el.innerText = like_count;
             
             button_el.classList.remove('btn-warning');
             button_el.classList.add('btn-outline-secondary');

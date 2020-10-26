@@ -6,42 +6,60 @@
         <div class="grid-sizer col-md-6 col-lg-4 col-xl-3"></div>
 
         {% for post in page_obj %}
-            <div class="grid-item col-md-6 col-lg-4 col-xl-3 mb-4">
+            <div class="grid-item col-md-6 col-lg-4 col-xl-3 mb-4" id="post-card-{{post.id}}">
                 
                 <div class="grid-item-content card text-white w-100 bg-primary">
+
+                    {# CARD HEADER #}
                     <div class="card-header">
+
+                        {# POST TITLE #}
                         <div class="h5 mb-0">
                             {{ post.title }}
                         </div>
 
+                        {# POST OWNER #}
                         <div class="small text-muted">
                             Posted by:
-                            <a href="{% url 'user_profile' post.owner.id %}">{{ post.owner.get_full_name }}</a>
+                            <a class="badge badge-info" href="{% url 'user_profile' post.owner.id %}">{{ post.owner.get_full_name }}</a>
                             <br>
                         </div>
                     </div>
                     
                     <div class="card-body">
 
+                        {# CARD IMAGE #}
                         <div class="text-center">
                             {% if post.image %}
                                 <img class="img-fluid post-image mb-3" src="..{{ post.image.url }}" alt="{{ post.text }}">
                             {% endif %}
                         </div>
-
+                        
+                        {# CARD TEXT #}
                         <div class="text-left post-text prewrap" id="post-text-{{post.id}}">{{post.text}}</div>
 
+                        {# EDIT BUTTON #}
                         {% if post in owned_posts and user.is_authenticated %}
                         <div>
                             <button id="edit-save-btn-{{post.id}}" 
-                                    class="btn btn-danger btn-sm w-100 mt-3" 
+                                    class="btn btn-warning btn-sm w-100 mt-3" 
                                     onclick="edit_post({{post.id}})"
-                                    data-toggle="popover-edit-save">Edit</button>
+                                    data-toggle="popover-edit-save">Edit
+                            </button>
+                        </div>
+                        <div>
+                            <button id="delete-btn-{{post.id}}" 
+                                    class="btn btn-danger btn-sm w-100 mt-2" 
+                                    onclick="delete_post({{post.id}})"
+                                    data-toggle="popover-delete">Delete
+                            </button>
                         </div>
                         {% endif %}
                     </div>
-            
+
+                    {# CARD FOOTER #}
                     <div class="card-footer d-flex justify-content-between">
+                        {# Timestamp #}
                         <div class="text-muted small">
                             {{post.timestamp|timesince}} ago
                             <br>
@@ -70,9 +88,22 @@
 
                                 <span id="like-count-{{post.id}}">{{ post.like_count }}</span> likes
                         </button>
+
                     </div>
                 </div>
         
+            </div>
+        {% empty %}
+            {# EMPTY Placeholder #}
+            <div class="grid-sizer w-100"></div>
+            <div class="grid-item w-100">
+                <div class="grid-item-content">
+                    <div class="bg-secondary text-light p-5 m-3 text-center">
+                        <i class="far fa-sad-tear display-1 mb-3"></i>
+                        <h3>Nothing here</h3>
+                        <h5>No posts yet</h5>
+                    </div>
+                </div>
             </div>
         {% endfor %}
     </div>
@@ -125,4 +156,5 @@
 {# Masonry, Edit, and Like Scripts #}
 <script src="{% static 'network/js/like_post.js' %}"></script>
 <script src="{% static 'network/js/edit_post.js' %}"></script>
+<script src="{% static 'network/js/delete_post.js' %}"></script>
 <script src="{% static 'network/js/masonry.js' %}"></script>

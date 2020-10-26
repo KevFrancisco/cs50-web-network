@@ -51,15 +51,15 @@
 
     {# Following and Follower Indicator #}
     <div class="my-auto">
-        <a class="font-weight-bold btn btn-sm btn-warning px-5 mr-2"
+        <a class="font-weight-bold btn btn-sm btn-info px-5 mr-2"
             {% if following %}
                 data-toggle="popover"
                 data-placement="bottom"
                 data-html="true"
                 data-content="
                     {% for u in following %}
-                        <div class='mx-3 my-2'>
-                            <a href='{% url 'user_profile' u.following.id %}' class='text-decoration-none'>
+                        <div class='btn btn-info btn-sm d-block m-2'>
+                            <a href='{% url 'user_profile' u.following.id %}' class='text-decoration-none text-white px-5 font-body text-nowrap'>
                                 {{ u.following.get_full_name }}
                             </a>
                         </div>
@@ -73,15 +73,15 @@
     </div>
 
     <div class="my-auto">
-        <a class="font-weight-bold btn btn-sm btn-info px-5"
+        <a class="font-weight-bold btn btn-sm btn-success px-5"
             {% if followers %}
                 data-toggle="popover"
                 data-placement="bottom"
                 data-html="true"
                 data-content="
                     {% for u in followers %}
-                        <div class='mx-3 my-2'>
-                            <a href='{% url 'user_profile' u.followed_by.id %}' class='text-decoration-none'>
+                        <div class='btn btn-success btn-sm m-2'>
+                            <a href='{% url 'user_profile' u.followed_by.id %}' class='text-decoration-none text-white px-5 font-body text-nowrap'>
                                 {{ u.followed_by.get_full_name }}
                             </a>
                         </div>
@@ -100,10 +100,6 @@ $(function () {
   $('[data-toggle="popover"]').popover({  })
 })
 </script>
-
-{{ following }}
-<br>
-{{ followers }}
 
 {% include "network/posts-masonry.html" %}
 
