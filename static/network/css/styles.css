@@ -1,0 +1,35 @@
+.navbar-logo {
+    max-height: 2.3rem;
+}
+
+.post-image {
+    max-height: 512px;
+}
+
+.font-brand, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Righteous', cursive;
+}
+
+#liked {
+    cursor: pointer;
+}
+
+.grid-item-content {
+    transition: width 0.3s, height 0.3s;
+}
+
+.prewrap {
+    white-space: pre-line;
+}
+
+textarea, .post-text {
+    min-height: 30px;
+}
+
+.bg-darker {
+    background-color: rgba(33, 33, 33, 0.15);
+}
+
+.bg-darkerer {
+    background-color: rgba(33, 33, 33, 0.5);
+}
