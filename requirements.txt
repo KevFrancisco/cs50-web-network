@@ -39,7 +39,7 @@ Django==3.2.9
 django-admin==2.0.1
 django-excel-base==1.0.4
 django-excel-response2==3.0.2
-django-heroku==0.0.0
+django-on-heroku==1.1.2
 django-six==1.0.4
 django-widget-tweaks==1.4.9
 docker==4.1.0
@@ -118,6 +118,7 @@ pluggy==0.13.0
 ply==3.11
 protobuf==3.12.4
 psutil==5.8.0
+psycopg2-binary==2.9.2
 py==1.10.0
 pyalsaaudio==0.8.4
 pycairo==1.16.2
