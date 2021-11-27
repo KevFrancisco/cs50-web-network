@@ -1,4 +1,4 @@
-#!/mnt/sdc2/cs50-web/project4/venv/bin/python3
+#!/mnt/sdb2/cs50-web/project4/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
