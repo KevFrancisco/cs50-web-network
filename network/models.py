@@ -4,9 +4,7 @@ from django.forms import ModelForm
 from django import forms
 
 
-# class User(AbstractUser):
-#     pass
-class User(models.Model):
+class User(AbstractUser):
     pass
 
 
