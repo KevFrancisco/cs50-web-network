@@ -1,5 +1,6 @@
 altgraph==0.17
 appdirs==1.4.4
+apparmor
 apturl
 asgiref==3.4.1
 astor==0.8.1
