@@ -36,7 +36,11 @@ distro==1.5.0
 distro-info==1.0
 dj-database-url==0.5.0
 Django==3.2.9
+django-admin==2.0.1
+django-excel-base==1.0.4
+django-excel-response2==3.0.2
 django-heroku==0.0.0
+django-six==1.0.4
 django-widget-tweaks==1.4.9
 docker==4.1.0
 docker-compose==1.25.0
@@ -56,7 +60,7 @@ gbinder-python==1.0.0
 gpg===1.14.0-unknown
 greenlet==0.4.17
 html5lib==1.1
-httplib2==0.19.1
+httplib2==0.18.1
 hy==0.19.0
 idna==2.10
 importlib-metadata==1.6.0
@@ -67,7 +71,7 @@ JACK-Client==0.5.3
 jdcal==1.0
 jeepney==0.6.0
 jellyfish==0.8.8
-Jinja2==2.11.3
+Jinja2==2.11.2
 jsonschema==3.2.0
 keyring==22.2.0
 kiwisolver==1.3.1
@@ -109,7 +113,7 @@ paramiko==2.7.2
 pathspec==0.8.1
 pefile==2019.4.18
 pexpect==4.8.0
-Pillow==8.3.2
+Pillow==8.1.2
 pluggy==0.13.0
 ply==3.11
 protobuf==3.12.4
@@ -124,7 +128,7 @@ pycups==2.0.1
 pydot==1.4.2
 pyelftools==0.27
 pygame==2.0.1
-Pygments==2.7.4
+Pygments==2.7.1
 PyGObject==3.38.0
 PyJWT==1.7.1
 pyliblo==0.10.0
@@ -146,7 +150,7 @@ python3-discogs-client==2.3.5
 pytz==2021.1
 pyxattr==0.7.2
 pyxdg==0.27
-PyYAML==5.4
+PyYAML==5.3.1
 rdflib==5.0.0
 regex==2021.4.4
 reportlab==3.5.66
@@ -154,6 +158,7 @@ requests==2.25.1
 rply==0.7.7
 scipy==1.6.0
 scour==0.38.2
+screen==1.0.1
 SecretStorage==3.3.1
 setproctitle==1.2.1
 simplejson==3.17.2
@@ -175,7 +180,7 @@ ubuntu-drivers-common==0.0.0
 ufw==0.36
 unattended-upgrades==0.1
 unidiff==0.5.5
-urllib3==1.26.5
+urllib3==1.26.2
 usb-creator==0.3.7
 vboxapi==1.0
 virtualenv==20.4.7
