@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary",
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,8 @@ django_on_heroku.settings(locals())
 
 ###### New Autofield settings by Django #####
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+### Cloudinary imports
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api

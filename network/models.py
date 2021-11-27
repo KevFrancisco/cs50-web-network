@@ -3,6 +3,8 @@ from django.db import models
 from django.forms import ModelForm
 from django import forms
 
+from cloudinary.models import CloudinaryField
+
 
 class User(AbstractUser):
     pass
@@ -21,7 +23,9 @@ class Post(models.Model):
     text = models.CharField(
         max_length=555,
     )
-    image = models.ImageField(upload_to="network/", blank=True)
+    # Deprecated local image hosting
+    # image = models.ImageField(upload_to="network/", blank=True)
+    image = CloudinaryField("image")
     timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
