@@ -1,5 +1,5 @@
 altgraph==0.17
-apparmor==3.0.0
+apparmor
 appdirs==1.4.4
 apturl==0.5.2
 asgiref==3.4.1
