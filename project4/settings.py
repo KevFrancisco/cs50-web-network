@@ -1,3 +1,7 @@
+# Heroku - Must import on top
+# See the ff: https://devcenter.heroku.com/articles/django-app-configuration
+import django_heroku
+
 """
 Django settings for project4 project.
 
@@ -136,6 +140,8 @@ LOGIN_URL = "/login"
 
 ###### HEROKU SETTINGS #######
 # Configure Django App for Heroku.
-import django_heroku
 
 django_heroku.settings(locals())
+
+###### New Autofield settings by Django #####
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
