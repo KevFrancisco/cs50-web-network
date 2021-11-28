@@ -32,7 +32,7 @@
                             {# CARD IMAGE #}
                             <div class="text-center">
                                 {% if post.image %}
-                                    <img class="img-fluid post-image mb-3" src="..{{ post.image.url }}" alt="{{ post.text }}">
+                                    <img class="img-fluid post-image mb-3" src="{{ post.image.url }}" alt="{{ post.text }}">
                                 {% endif %}
                             </div>
                             
