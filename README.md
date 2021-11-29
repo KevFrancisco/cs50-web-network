@@ -19,4 +19,5 @@ The site then fetches and updates data asynchronously, all done in native Javasc
 ### Update:
 Moved to cloudinary for media file hosting.
 See this tutorial for reference:
-https://www.section.io/engineering-education/uploading-images-to-cloudinary-from-django-application/
+
+[Using Cloudinary in Django](https://www.section.io/engineering-education/uploading-images-to-cloudinary-from-django-application/)
