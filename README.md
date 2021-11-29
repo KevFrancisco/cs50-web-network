@@ -1,5 +1,9 @@
 # CS50 Web - Network
 
+A light social media web application where users can make posts, like posts, and follow other users!
+Majority of the sites functionality is done via a very simple API built in Django.
+The site then fetches and updates data asynchronously, all done in native Javascript.
+
 ### Features:
 - Users can make social 'posts'.
 - Users can like their own, and other peoples' posts.
