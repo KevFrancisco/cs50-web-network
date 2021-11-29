@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+# Environ imports - used for SECRET_KEY
+# See section below
+import environ
+
+environ.Env.read_env()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,6 +27,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = "13kl@xtukpwe&xj2xoysxe9_6=tf@f8ewxer5n&ifnd46+6$%8"
+# Like any good production deployment, use config_vars!
+# See this tutorial for pointers:
+# https://medium.com/@natmakesthings/hiding-secret-key-in-django-deployment-on-heroku-59b9640819a
+SECRET_KEY = os.environ[‘SECRET_KEY’]
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
