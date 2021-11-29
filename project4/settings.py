@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Like any good production deployment, use config_vars!
 # See this tutorial for pointers:
 # https://medium.com/@natmakesthings/hiding-secret-key-in-django-deployment-on-heroku-59b9640819a
-SECRET_KEY = os.environ[‘SECRET_KEY’]
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
